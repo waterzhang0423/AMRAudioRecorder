@@ -3,27 +3,30 @@ package com.water.example;
 import android.os.Handler;
 
 /**
- * Created by Chris on 12/9/13.
+ * A convenient way to use timer.
+ *
+ * Created by Water Zhang on 12/9/13.
  */
 public class EasyTimer {
     private Handler handler;
     private Runnable runnable;
     private long delayInterval;
     private CallBack callBack;
+    private boolean stopped;
 
-    public static interface CallBack
-    {
-        public void execute();
+    public interface CallBack {
+        void execute();
     }
 
-    public EasyTimer(final long millionSeconds, final CallBack callBack) {
+    public EasyTimer (final long millionSeconds,final CallBack callBack) {
         this.delayInterval = millionSeconds;
         this.callBack = callBack;
         start();
     }
 
     public void stop  () {
-        handler.removeCallbacks(runnable);
+        stopped = true;
+        handler.removeCallbacksAndMessages(null);
     }
 
     public void restart () {
@@ -32,12 +35,15 @@ public class EasyTimer {
     }
 
     private void start () {
+        stopped = false;
         handler = new Handler();
         runnable = new Runnable() {
             @Override
             public void run() {
-                callBack.execute();
-                handler.postDelayed(runnable,delayInterval);
+                if (!stopped) {
+                    callBack.execute();
+                    handler.postDelayed(runnable,delayInterval);
+                }
             }
         };
         handler.postDelayed(runnable,delayInterval);

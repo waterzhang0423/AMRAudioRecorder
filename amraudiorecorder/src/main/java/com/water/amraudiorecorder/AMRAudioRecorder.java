@@ -50,26 +50,24 @@ public class AMRAudioRecorder  {
     }
 
     public boolean start () {
-
-        if (!prepareRecorder()) {
-            return false;
-        }
+        prepareRecorder();
 
         try {
             recorder.prepare();
-            isRecording = true;
         } catch (IOException e) {
             e.printStackTrace();
             return false;
         }
 
         recorder.start();
+        isRecording = true;
+
         return true;
     }
 
     public boolean pause () {
-        if (recorder == null) {
-            return false;
+        if (recorder == null || !isRecording) {
+            throw new IllegalStateException("[AMRAudioRecorder] recorder is not recording!");
         }
 
         recorder.stop();
@@ -82,13 +80,16 @@ public class AMRAudioRecorder  {
     }
 
     public boolean resume () {
+        if (isRecording) {
+            throw new IllegalStateException("[AMRAudioRecorder] recorder is recording!");
+        }
+
         singleFile = false;
         newRecorder();
         return start();
     }
 
     public boolean stop () {
-
         if (!isRecording) {
             return merge();
         }
@@ -161,10 +162,10 @@ public class AMRAudioRecorder  {
         recorder = new MediaRecorder();
     }
 
-    private boolean prepareRecorder () {
+    private void prepareRecorder () {
         File directory = new File(this.fileDirectory);
         if (!directory.exists() || !directory.isDirectory()) {
-            return false;
+            throw new IllegalArgumentException("[AMRAudioRecorder] audioFileDirectory is a not valid directory!");
         }
 
         String filePath = directory.getAbsolutePath() + "/" + new Date().getTime() + ".amr";
@@ -174,7 +175,5 @@ public class AMRAudioRecorder  {
         recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
         recorder.setOutputFormat(MediaRecorder.OutputFormat.RAW_AMR);
         recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
-
-        return true;
     }
 }
