@@ -1,6 +1,10 @@
 package com.water.example;
 
+import android.Manifest;
+import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
@@ -9,23 +13,49 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.water.amraudiorecorder.AMRAudioRecorder;
+import com.water.example.utils.PermissionUtils;
+import com.water.example.utils.PermissionsDialogue;
 
 import java.io.File;
 
 public class MainActivity extends AppCompatActivity {
 
-    private TextView mRecordingTime;
+    private int mRecordTimeInterval;
 
+    private TextView mRecordingTime;
     private AMRAudioRecorder mRecorder;
     private EasyTimer mAudioTimeLabelUpdater;
-    private int mRecordTimeInterval;
+    private PermissionsDialogue.Builder alertPermissions;
+    private Context mContext;
+
+    private String[] permissionsList = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.RECORD_AUDIO};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mRecordingTime = (TextView)findViewById(R.id.recordingTime);
+        mContext = getApplicationContext();
+        //Request permissions on Marshmallow and above
+        if (Build.VERSION.SDK_INT >= 23) {
+            if (!PermissionUtils.IsPermissionsEnabled(mContext, permissionsList))
+            {
+                mRecordingTime = (TextView) findViewById(R.id.recordingTime);
+                alertPermissions = new PermissionsDialogue.Builder(this)
+                        .setMessage("Secret Intro is an Intro App and requires the Following permissions: ")
+                        .setRequireStorage(PermissionsDialogue.REQUIRED)
+                        .setRequireAudio(PermissionsDialogue.REQUIRED)
+                        .setOnContinueClicked(new PermissionsDialogue.OnContinueClicked() {
+                            @Override
+                            public void OnClick(View view, Dialog dialog) {
+                                dialog.dismiss();
+                            }
+                        })
+                        .setCancelable(false)
+                        .build();
+                alertPermissions.show();
+            }
+        }
     }
 
     public void viewOnClick(View view) {
