@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
             {
                 mRecordingTime = (TextView) findViewById(R.id.recordingTime);
                 alertPermissions = new PermissionsDialogue.Builder(this)
-                        .setMessage("Secret Intro is an Intro App and requires the Following permissions: ")
+                        .setMessage("AMRAudioRecorder records audio and requires the following permissions: ")
                         .setRequireStorage(PermissionsDialogue.REQUIRED)
                         .setRequireAudio(PermissionsDialogue.REQUIRED)
                         .setOnContinueClicked(new PermissionsDialogue.OnContinueClicked() {
