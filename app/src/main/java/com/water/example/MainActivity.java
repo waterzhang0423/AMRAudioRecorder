@@ -36,11 +36,11 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         mContext = getApplicationContext();
+        mRecordingTime = (TextView) findViewById(R.id.recordingTime);
         //Request permissions on Marshmallow and above
         if (Build.VERSION.SDK_INT >= 23) {
             if (!PermissionUtils.IsPermissionsEnabled(mContext, permissionsList))
             {
-                mRecordingTime = (TextView) findViewById(R.id.recordingTime);
                 alertPermissions = new PermissionsDialogue.Builder(this)
                         .setMessage("AMRAudioRecorder records audio and requires the following permissions: ")
                         .setRequireStorage(PermissionsDialogue.REQUIRED)
