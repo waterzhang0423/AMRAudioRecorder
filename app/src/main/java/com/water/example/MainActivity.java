@@ -120,8 +120,8 @@ public class MainActivity extends AppCompatActivity {
 
                 mRecorder.stop();
 
-                Intent intent = new Intent(this,PlaybackActivity.class);
-                intent.putExtra("audioFilePath",mRecorder.getAudioFilePath());
+                Intent intent = new Intent(this, PlaybackActivity.class);
+                intent.putExtra("audioFilePath", mRecorder.getAudioFilePath());
                 startActivity(intent);
 
                 resetRecording();
@@ -130,6 +130,11 @@ public class MainActivity extends AppCompatActivity {
 
             case R.id.trash:
 
+                if (mRecorder == null) {
+                    return;
+                }
+                
+                mRecorder.clear();
                 resetRecording();
 
                 break;
