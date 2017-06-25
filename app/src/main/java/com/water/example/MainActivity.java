@@ -119,6 +119,7 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 mRecorder.stop();
+                mRecorder = null;
 
                 Intent intent = new Intent(this, PlaybackActivity.class);
                 intent.putExtra("audioFilePath", mRecorder.getAudioFilePath());
@@ -133,8 +134,9 @@ public class MainActivity extends AppCompatActivity {
                 if (mRecorder == null) {
                     return;
                 }
-                
+
                 mRecorder.clear();
+                mRecorder = null;
                 resetRecording();
 
                 break;
@@ -145,11 +147,6 @@ public class MainActivity extends AppCompatActivity {
         if (mAudioTimeLabelUpdater != null) {
             mAudioTimeLabelUpdater.stop();
             mAudioTimeLabelUpdater = null;
-        }
-
-        if (mRecorder != null) {
-            mRecorder.stop();
-            mRecorder = null;
         }
 
         mRecordTimeInterval = 0;

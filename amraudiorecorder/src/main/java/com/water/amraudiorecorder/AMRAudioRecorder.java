@@ -59,10 +59,15 @@ public class AMRAudioRecorder  {
             return false;
         }
 
-        recorder.start();
-        isRecording = true;
+        if (recorder != null)
+        {
+            recorder.start();
+            isRecording = true;
 
-        return true;
+            return true;
+        }
+
+        return false;
     }
 
     public boolean pause() {
