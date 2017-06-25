@@ -119,12 +119,12 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 mRecorder.stop();
-                mRecorder = null;
 
                 Intent intent = new Intent(this, PlaybackActivity.class);
                 intent.putExtra("audioFilePath", mRecorder.getAudioFilePath());
                 startActivity(intent);
 
+                mRecorder = null;
                 resetRecording();
 
                 break;
