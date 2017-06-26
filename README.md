@@ -1,4 +1,6 @@
 # AMRAudioRecorder
+![Screenshot](Screenshot/app_icon.png)
+
 Android does not support pause and resume when recording amr audio, so we should do a little trick to support pause and resume funciton.
 ## Screenshot
 ![Screenshot](Screenshot/demo.jpg)

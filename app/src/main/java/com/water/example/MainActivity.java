@@ -36,13 +36,13 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         mContext = getApplicationContext();
+        mRecordingTime = (TextView) findViewById(R.id.recordingTime);
         //Request permissions on Marshmallow and above
         if (Build.VERSION.SDK_INT >= 23) {
             if (!PermissionUtils.IsPermissionsEnabled(mContext, permissionsList))
             {
-                mRecordingTime = (TextView) findViewById(R.id.recordingTime);
                 alertPermissions = new PermissionsDialogue.Builder(this)
-                        .setMessage("Secret Intro is an Intro App and requires the Following permissions: ")
+                        .setMessage("AMRAudioRecorder records audio and requires the following permissions: ")
                         .setRequireStorage(PermissionsDialogue.REQUIRED)
                         .setRequireAudio(PermissionsDialogue.REQUIRED)
                         .setOnContinueClicked(new PermissionsDialogue.OnContinueClicked() {
@@ -120,16 +120,23 @@ public class MainActivity extends AppCompatActivity {
 
                 mRecorder.stop();
 
-                Intent intent = new Intent(this,PlaybackActivity.class);
-                intent.putExtra("audioFilePath",mRecorder.getAudioFilePath());
+                Intent intent = new Intent(this, PlaybackActivity.class);
+                intent.putExtra("audioFilePath", mRecorder.getAudioFilePath());
                 startActivity(intent);
 
+                mRecorder = null;
                 resetRecording();
 
                 break;
 
             case R.id.trash:
 
+                if (mRecorder == null) {
+                    return;
+                }
+
+                mRecorder.clear();
+                mRecorder = null;
                 resetRecording();
 
                 break;
@@ -140,11 +147,6 @@ public class MainActivity extends AppCompatActivity {
         if (mAudioTimeLabelUpdater != null) {
             mAudioTimeLabelUpdater.stop();
             mAudioTimeLabelUpdater = null;
-        }
-
-        if (mRecorder != null) {
-            mRecorder.stop();
-            mRecorder = null;
         }
 
         mRecordTimeInterval = 0;
